@@ -1,5 +1,5 @@
-import React from 'react'
-
+import {BsBookmarkStar} from 'react-icons/bs';
+import {AiOutlineEye} from 'react-icons/ai';
 const Singlemovie = () => {
   return (
     <div className='shadow-md px-4 py-2'>
@@ -15,6 +15,10 @@ const Singlemovie = () => {
                 <span className='font-semibold block text-sm'>ID: 1</span>
                 <span className='font-semibold block text-sm'>Episode No: S02E01</span>                
                 <span className='font-bold block text-lg'> A Rickle in Time</span>
+        </div>
+        <div className='flex justify-between'>
+            <button className='border px-5 py-1 text-md border-gray-400 rounded-sm hover:bg-gray-200'><BsBookmarkStar /></button>
+            <button className='border px-5 py-1 text-md border-gray-400 rounded-sm hover:bg-gray-200'><AiOutlineEye /></button>
         </div>
     </div>
   )
