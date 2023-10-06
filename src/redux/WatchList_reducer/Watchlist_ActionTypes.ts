@@ -1,0 +1,2 @@
+export const ADD_WATCHLIST = "ADD_WATCHLIST";
+export const REMOVE_WATCHLIST = "REMOVE_WATCHLIST";

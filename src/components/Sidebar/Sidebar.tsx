@@ -1,10 +1,19 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { hideSidebar } from '../../redux/Sidebar_reducer/Sidebar_Actions';
 import { BsTrash, BsCheckLg } from 'react-icons/bs';
 import { AiOutlineArrowLeft } from 'react-icons/ai';
 
+export interface elementtype {
+    id: string,
+    episode: string,
+    name: string,
+    time: string
+}
+
 const Sidebar = () => {
+    const watchlist = useSelector((state) => state.WatchlistReducer.watchlist);
+    console.log('watchlists', watchlist)
     const dispatch = useDispatch();
     const HideSideBar = () => {
         dispatch(hideSidebar());
@@ -62,54 +71,27 @@ const Sidebar = () => {
                         <div className='pt-4 px-2'>
                             <span className='text-sm font-semibold text-gray-600'>Watching</span>
 
-                            <div className='border p-2 my-2'>
-                                <span className='text-sm font-semibold block'>1. Lorem, ipsum dolor.</span>
-                                <div className='pl-3'>
-                                    <span className='text-xs font-semibold block'>ID NO: 1</span>
-                                    <div className='bg-red-200 px-3 py-1 inline-block rounded-sm my-1 cursor-pointer'>
-                                        <span className='text-red-700 font-extrabold text-md '><BsTrash /></span>
-                                    </div>
-                                    <div className='bg-green-200 px-3 py-1 inline-block rounded-sm my-1 ml-3 cursor-pointer'>
-                                        <span className='text-green-700 font-extrabold text-md '><BsCheckLg /></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className='border p-2 my-2'>
-                                <span className='text-sm font-semibold block'>1. Lorem, ipsum dolor.</span>
-                                <div className='pl-3'>
-                                    <span className='text-xs font-semibold block'>ID NO: 1</span>
-                                    <div className='bg-red-200 px-3 py-1 inline-block rounded-sm my-1 cursor-pointer'>
-                                        <span className='text-red-700 font-extrabold text-md '><BsTrash /></span>
-                                    </div>
-                                    <div className='bg-green-200 px-3 py-1 inline-block rounded-sm my-1 ml-3 cursor-pointer'>
-                                        <span className='text-green-700 font-extrabold text-md '><BsCheckLg /></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className='border p-2 my-2'>
-                                <span className='text-sm font-semibold block'>1. Lorem, ipsum dolor.</span>
-                                <div className='pl-3'>
-                                    <span className='text-xs font-semibold block'>ID NO: 1</span>
-                                    <div className='bg-red-200 px-3 py-1 inline-block rounded-sm my-1 cursor-pointer'>
-                                        <span className='text-red-700 font-extrabold text-md '><BsTrash /></span>
-                                    </div>
-                                    <div className='bg-green-200 px-3 py-1 inline-block rounded-sm my-1 ml-3 cursor-pointer'>
-                                        <span className='text-green-700 font-extrabold text-md '><BsCheckLg /></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className='border p-2 my-2'>
-                                <span className='text-sm font-semibold block'>1. Lorem, ipsum dolor.</span>
-                                <div className='pl-3'>
-                                    <span className='text-xs font-semibold block'>ID NO: 1</span>
-                                    <div className='bg-red-200 px-3 py-1 inline-block rounded-sm my-1 cursor-pointer'>
-                                        <span className='text-red-700 font-extrabold text-md '><BsTrash /></span>
-                                    </div>
-                                    <div className='bg-green-200 px-3 py-1 inline-block rounded-sm my-1 ml-3 cursor-pointer'>
-                                        <span className='text-green-700 font-extrabold text-md '><BsCheckLg /></span>
-                                    </div>
-                                </div>
-                            </div>
+                            {
+                                watchlist && watchlist.map((ele:elementtype,index:number) => {
+                                    return (
+                                        <div className='border p-2 my-2'>
+                                            <span className='text-sm font-semibold block'>{index +1}. {ele.name}</span>
+                                            <div className='pl-3'>
+                                                <span className='text-xs font-semibold block'>ID NO: {ele.id}</span>
+                                                <div className='bg-red-200 px-3 py-1 inline-block rounded-sm my-1 cursor-pointer'>
+                                                    <span className='text-red-700 font-extrabold text-md '><BsTrash /></span>
+                                                </div>
+                                                <div className='bg-green-200 px-3 py-1 inline-block rounded-sm my-1 ml-3 cursor-pointer'>
+                                                    <span className='text-green-700 font-extrabold text-md '><BsCheckLg /></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    )
+                                })
+                            }
+
+
                         </div>
                     </div>
                 }
@@ -117,7 +99,7 @@ const Sidebar = () => {
                     SidebarStatus.bookmark &&
 
                     <div>
-                         <span onClick={GoBackClicked} className='py-3 block px-2 cursor-pointer'><AiOutlineArrowLeft /></span>
+                        <span onClick={GoBackClicked} className='py-3 block px-2 cursor-pointer'><AiOutlineArrowLeft /></span>
                         <span className='font-semibold text-md text-center block pt-5'>My Bookmarks List</span>
                         <div className='pt-4 px-2'>
                             <span className='text-sm font-semibold text-gray-600'>Bookmarks</span>
@@ -194,7 +176,7 @@ const Sidebar = () => {
                     SidebarStatus.watched &&
 
                     <div>
-                         <span onClick={GoBackClicked} className='py-3 block px-2 cursor-pointer'><AiOutlineArrowLeft /></span>
+                        <span onClick={GoBackClicked} className='py-3 block px-2 cursor-pointer'><AiOutlineArrowLeft /></span>
                         <span className='font-semibold text-md text-center block pt-5'>My Watched List</span>
                         <div className='pt-4 px-2'>
                             <span className='text-sm font-semibold text-gray-600'>Watched</span>
