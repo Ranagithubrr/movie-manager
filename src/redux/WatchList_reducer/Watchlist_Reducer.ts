@@ -50,7 +50,15 @@ export const WatchlistReducer = (state = InitialState, action: ActionType) => {
                 localStorage.setItem("watchlistState", JSON.stringify(updatedState));
                 return updatedState;
             } else {
-                return state
+                const idToRemove = action.payload.id;
+                const updatedWatchlist = state.watchlist.filter((item) => item.id !== idToRemove);
+                const updatedState = {
+                    ...state,
+                    watchlist: updatedWatchlist,
+                };
+                // Save the updated state to local storage.
+                localStorage.setItem("watchlistState", JSON.stringify(updatedState));
+                return updatedState;
             }
         case REMOVE_WATCHLIST:
             const idToRemove = action.payload;
