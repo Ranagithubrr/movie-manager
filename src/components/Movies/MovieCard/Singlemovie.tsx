@@ -10,12 +10,13 @@ interface proptype {
   movie: Episode | null
 }
 const Singlemovie = (props: proptype) => {
-  const watchlist = useSelector((state) => state.WatchlistReducer.watchlist)
-  console.log('my watch', watchlist);
+  const watchlist = useSelector((state) => state.WatchlistReducer.watchlist);
+  const Alreadywatchlist = useSelector((state) => state.AlreadyWatchlistReducer);
+  console.log('already watched', Alreadywatchlist);
   const dispatch = useDispatch();
 
   const { showstate, setDetails, movie } = props;
-  const newItem = {
+  let newItem = {
     id: movie!.id,
     episode: movie!.episode,
     name: movie!.name,
@@ -29,11 +30,27 @@ const Singlemovie = (props: proptype) => {
     console.log(movie)
   };
 
+  // getting date time;
+  const date = new Date().getDate();
+  const month = new Date().getMonth() + 1; // Adding 1 to month because getMonth() returns 0-based months
+  const year = new Date().getFullYear();
+  const hours = new Date().getHours();
+  const minutes = new Date().getMinutes();
+
+  // Function to add leading zeros
+  function addLeadingZero(value: number) {
+    return value < 10 ? `0${value}` : value;
+  }
+
+  const finalDateTime = `${addLeadingZero(date)}.${addLeadingZero(month)}.${year} -- ${addLeadingZero(hours)}:${addLeadingZero(minutes)}`;
+  newItem.time = finalDateTime;
+
   const AddtoWatchList = () => {
     dispatch(addwatchlist(newItem))
   }
 
   const alreadyinWatchList = watchlist.some(item => item.id === movie?.id);
+  const alreadyinCompletedWatchList = Alreadywatchlist.Alreadywatchlist.some(item => item.id === movie?.id);
   console.log('found', alreadyinWatchList)
 
   return (
@@ -41,14 +58,17 @@ const Singlemovie = (props: proptype) => {
       {showstate && (
         <div onClick={HideBackDrop} className="fixed w-screen left-0 h-screen top-0 bg-gray-600 opacity-50 z-10"></div>
       )}
-      <div className='absolute -right-8 top-5 w-32 text-center rotate-45 bg-yellow-300'>
-        <span className='text-sm font-semibold'>Watched</span>
-      </div>
+      {
+        alreadyinCompletedWatchList &&
+        <div className='absolute -right-8 top-5 w-32 text-center rotate-45 bg-yellow-300'>
+          <span className='text-sm font-semibold'>Watched</span>
+        </div>
+      }
       <div onClick={SetMovieDetails}>
         <div>
           <img src="https://assets.mycast.io/posters/world-war-hulk-2023-miniseries-fan-casting-poster-219057-medium.jpg?1658634732" alt="movie image" className='h-48 w-full' />
         </div>
-        <div>          
+        <div>
           <span className='font-semibold block text-sm'>ID: {movie?.id}</span>
           <span className='font-semibold block text-sm'>Episode No: {movie?.episode}</span>
           <span className='font-bold block text-lg'>{movie?.name}</span>
@@ -56,7 +76,7 @@ const Singlemovie = (props: proptype) => {
       </div>
       <div className='flex justify-between items-end'>
         <button className={`border px-5 py-1 text-md border-gray-400 rounded-sm hover:bg-gray-200`}><BsBookmarkStar /></button>
-        <button onClick={AddtoWatchList} className={`border px-5 py-1 text-md border-gray-400 rounded-sm hover:bg-gray-200 ${alreadyinWatchList && 'bg-green-500'}`}><AiOutlineEye /></button>
+        <button onClick={AddtoWatchList} className={`border px-5 py-1 text-md border-gray-400 rounded-sm ${alreadyinWatchList ? 'bg-green-500 hover:bg-green-400' : 'hover:bg-gray-200'}`}><AiOutlineEye /></button>
       </div>
     </div>
   )

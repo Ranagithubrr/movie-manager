@@ -1,0 +1,2 @@
+export const ADD_WATCHED = "ADD_WATCHED";
+export const REMOVE_WATCHED = "REMOVE_WATCHED";

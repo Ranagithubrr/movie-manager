@@ -5,13 +5,19 @@ import { useQuery } from '@apollo/client';
 import { GET_EPISODS } from '../../Apollo/Queries/Queries';
 const Movies = () => {
   const [showMovieDetails, setShowMovieDetails] = useState<boolean>(false);
-  const { loading, data } = useQuery(GET_EPISODS);
+  const { loading, data, error } = useQuery(GET_EPISODS);
   console.log(loading);
   console.log(data);
   return (
     <div className='p-3 grid grid-cols-6 gap-10 pt-5'>
       {
         showMovieDetails && <MovieDetails setShowMovieDetails={setShowMovieDetails} />
+      }
+      {
+        error &&
+        <div className='h-screen w-screen flex items-center justify-center'>
+          <span>OOPS there is an error . . .</span>
+        </div>
       }
       {
         loading &&
