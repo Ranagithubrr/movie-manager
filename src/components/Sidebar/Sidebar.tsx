@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { hideSidebar } from '../../redux/Sidebar_reducer/Sidebar_Actions';
 import { BsTrash, BsCheckLg } from 'react-icons/bs';
 import { AiOutlineArrowLeft } from 'react-icons/ai';
-import { removewatchlist } from '../../redux/WatchList_reducer/Watchlist_Actions';
+import { addwatchlist, removewatchlist } from '../../redux/WatchList_reducer/Watchlist_Actions';
 import { addAlreadywatchlist, removeAlreadywatchlist } from '../../redux/Already_watched_reducer/Already_watched_list_Actions';
+import { removefrombookmarks } from '../../redux/Bookmark_reducer/Bookmark_Actions';
 
 export interface elementtype {
     id: string,
@@ -15,8 +16,8 @@ export interface elementtype {
 
 const Sidebar = () => {
     const watchlist = useSelector((state) => state.WatchlistReducer.watchlist);
-    const AlreadyWatchlist = useSelector((state) => state.AlreadyWatchlistReducer.Alreadywatchlist);
-    console.log('watchlists', watchlist)
+    const bookmark = useSelector((state) => state.BookmarkReducer.bookmark);
+    const AlreadyWatchlist = useSelector((state) => state.AlreadyWatchlistReducer.Alreadywatchlist);    
     const dispatch = useDispatch();
     const HideSideBar = () => {
         dispatch(hideSidebar());
@@ -65,6 +66,10 @@ const Sidebar = () => {
     const DeleteItem = (id: string) => {
         dispatch(removewatchlist(id))
     }
+    // deleting bookmark
+    const DeleteBookmark = (id: string) => {
+        dispatch(removefrombookmarks(id))
+    }
     // move to already watched list
     const AddtoAlreadyWatchedList = (ele: elementtype) => {
         let newItem = {
@@ -74,7 +79,7 @@ const Sidebar = () => {
             time: "12 AM"
         }
         const date = new Date().getDate();
-        const month = new Date().getMonth() + 1; // Adding 1 to month because getMonth() returns 0-based months
+        const month = new Date().getMonth() + 1;
         const year = new Date().getFullYear();
         const hours = new Date().getHours();
         const minutes = new Date().getMinutes();
@@ -86,6 +91,28 @@ const Sidebar = () => {
         newItem.time = finalDateTime;
         dispatch(addAlreadywatchlist(newItem));
         dispatch(removewatchlist(ele.id));
+    }
+    // move to already watched list
+    const AddtoWatchList = (ele: elementtype) => {
+        let newItem = {
+            id: ele.id,
+            episode: ele.episode,
+            name: ele.name,
+            time: "12 AM"
+        }
+        const date = new Date().getDate();
+        const month = new Date().getMonth() + 1; 
+        const year = new Date().getFullYear();
+        const hours = new Date().getHours();
+        const minutes = new Date().getMinutes();
+
+        function addLeadingZero(value: number) {
+            return value < 10 ? `0${value}` : value;
+        }
+        const finalDateTime = `${addLeadingZero(date)}.${addLeadingZero(month)}.${year} -- ${addLeadingZero(hours)}:${addLeadingZero(minutes)}`;
+        newItem.time = finalDateTime;
+        dispatch(addwatchlist(newItem));
+        dispatch(removefrombookmarks(ele.id));
     }
 
     // delete from already watched 
@@ -101,7 +128,7 @@ const Sidebar = () => {
 
                     <div>
                         <span onClick={GoBackClicked} className='py-3 block px-2 cursor-pointer'><AiOutlineArrowLeft /></span>
-                        <span className='font-semibold text-md text-center block pt-5'>My Watch List</span>
+                        <span className='font-semibold text-md text-center block pt-5'>My Watch List ({watchlist.length})</span>
                         <div className='pt-4 px-2'>
                             <span className='text-sm font-semibold text-gray-600'>Watching</span>
                             {
@@ -140,75 +167,35 @@ const Sidebar = () => {
 
                     <div>
                         <span onClick={GoBackClicked} className='py-3 block px-2 cursor-pointer'><AiOutlineArrowLeft /></span>
-                        <span className='font-semibold text-md text-center block pt-5'>My Bookmarks List</span>
+                        <span className='font-semibold text-md text-center block pt-5'>My Bookmarks List ({bookmark.length})</span>
                         <div className='pt-4 px-2'>
                             <span className='text-sm font-semibold text-gray-600'>Bookmarks</span>
-                            <div className='border p-2 my-2'>
-                                <span className='text-sm font-semibold block'>1. Lorem, ipsum dolor.</span>
-                                <div className='pl-3'>
-                                    <span className='text-xs font-semibold block'>ID NO: 1</span>
-                                    <div className='bg-red-200 px-3 py-1 inline-block rounded-sm my-1 cursor-pointer'>
-                                        <span className='text-red-700 font-extrabold text-md '><BsTrash /></span>
-                                    </div>
-                                    <div className='bg-green-200 px-3 py-1 inline-block rounded-sm my-1 ml-3 cursor-pointer'>
-                                        <span className='text-green-700 font-extrabold text-md '><BsCheckLg /></span>
-                                    </div>
+                            {
+                                bookmark && bookmark.map((ele: elementtype, index: number) => {
+                                    return (
+                                        <div className='border p-2 my-2'>
+                                            <span className='text-sm font-semibold block'>{index + 1}. {ele.name}</span>
+                                            <div className='pl-3'>
+                                                <span className='text-xs font-semibold block'>ID NO: {ele.id}</span>
+                                                <span className='text-xs font-semibold block'>Added On: {ele.time}</span>
+                                                <div className='bg-red-200 px-3 py-1 inline-block rounded-sm my-1 cursor-pointer' onClick={() => DeleteBookmark(ele.id)}>
+                                                    <span className='text-red-700 font-extrabold text-md '><BsTrash /></span>
+                                                </div>
+                                                <div className='bg-green-200 px-3 py-1 inline-block rounded-sm my-1 ml-3 cursor-pointer' onClick={() => AddtoWatchList(ele)}>
+                                                    <span className='text-green-700 font-extrabold text-md '><BsCheckLg /></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    )
+                                })
+                            }
+                            {
+                                bookmark.length == 0 && <div>
+                                    <span className='text-xs font-semibold block text-center py-10'>No Items in Your Watchlist</span>
                                 </div>
-                            </div>
-                            <div className='border p-2 my-2'>
-                                <span className='text-sm font-semibold block'>1. Lorem, ipsum dolor.</span>
-                                <div className='pl-3'>
-                                    <span className='text-xs font-semibold block'>ID NO: 1</span>
-                                    <div className='bg-green-200 px-3 py-1 inline-block rounded-sm my-1'>
-                                        <span className='text-green-700 font-extrabold text-md cursor-pointer'><BsCheckLg /></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className='border p-2 my-2'>
-                                <span className='text-sm font-semibold block'>1. Lorem, ipsum dolor.</span>
-                                <div className='pl-3'>
-                                    <span className='text-xs font-semibold block'>ID NO: 1</span>
-                                    <div className='bg-red-200 px-3 py-1 inline-block rounded-sm my-1'>
-                                        <span className='text-red-700 font-extrabold text-md cursor-pointer'><BsTrash /></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className='border p-2 my-2'>
-                                <span className='text-sm font-semibold block'>1. Lorem, ipsum dolor.</span>
-                                <div className='pl-3'>
-                                    <span className='text-xs font-semibold block'>ID NO: 1</span>
-                                    <div className='bg-red-200 px-3 py-1 inline-block rounded-sm my-1'>
-                                        <span className='text-red-700 font-extrabold text-md cursor-pointer'><BsTrash /></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className='border p-2 my-2'>
-                                <span className='text-sm font-semibold block'>1. Lorem, ipsum dolor.</span>
-                                <div className='pl-3'>
-                                    <span className='text-xs font-semibold block'>ID NO: 1</span>
-                                    <div className='bg-red-200 px-3 py-1 inline-block rounded-sm my-1'>
-                                        <span className='text-red-700 font-extrabold text-md cursor-pointer'><BsTrash /></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className='border p-2 my-2'>
-                                <span className='text-sm font-semibold block'>1. Lorem, ipsum dolor.</span>
-                                <div className='pl-3'>
-                                    <span className='text-xs font-semibold block'>ID NO: 1</span>
-                                    <div className='bg-red-200 px-3 py-1 inline-block rounded-sm my-1'>
-                                        <span className='text-red-700 font-extrabold text-md cursor-pointer'><BsTrash /></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className='border p-2 my-2'>
-                                <span className='text-sm font-semibold block'>1. Lorem, ipsum dolor.</span>
-                                <div className='pl-3'>
-                                    <span className='text-xs font-semibold block'>ID NO: 1</span>
-                                    <div className='bg-red-200 px-3 py-1 inline-block rounded-sm my-1'>
-                                        <span className='text-red-700 font-extrabold text-md cursor-pointer'><BsTrash /></span>
-                                    </div>
-                                </div>
-                            </div>
+
+                            }
                         </div>
                     </div>
                 }
@@ -217,7 +204,7 @@ const Sidebar = () => {
 
                     <div>
                         <span onClick={GoBackClicked} className='py-3 block px-2 cursor-pointer'><AiOutlineArrowLeft /></span>
-                        <span className='font-semibold text-md text-center block pt-5'>My Watched List</span>
+                        <span className='font-semibold text-md text-center block pt-5'>My Watched List ({AlreadyWatchlist.length})</span>
                         <div className='pt-4 px-2'>
                             <span className='text-sm font-semibold text-gray-600'>Watched</span>
                             {

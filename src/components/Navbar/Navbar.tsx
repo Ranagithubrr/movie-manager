@@ -5,8 +5,7 @@ import { showsidebar } from '../../redux/Sidebar_reducer/Sidebar_Actions';
 import Sidebar from '../Sidebar/Sidebar';
 
 const Navbar = () => {
-  const sidebarState = useSelector((state) => state.SidebarReducer);
-  console.log('state is', sidebarState);
+  const sidebarState = useSelector((state) => state.SidebarReducer);  
   const dispatch = useDispatch();
 
   const ShowSideBar = () => {
