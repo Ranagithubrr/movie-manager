@@ -59,12 +59,12 @@ const MovieDetails = (props: proptyps) => {
 
 
     return (
-        <div className='fixed w-5/6 m-auto top-10 left-0 right-0 h-5/6 overflow-scroll bg-white z-20 p-5'>
-            <span className='cursor-pointer float-right' onClick={CloseClicked}><FaTimes /></span>
-            <span className='text-xl font-bold block text-center'>{detailsPageData.movie.name}</span>
+        <div className='fixed w-5/6 m-auto top-10 left-0 right-0 h-5/6 overflow-scroll bg-white dark:bg-gray-800 z-20 p-5'>
+            <span className='cursor-pointer float-right dark:text-gray-300' onClick={CloseClicked}><FaTimes /></span>
+            <span className='text-xl font-bold block text-center dark:text-gray-300'>{detailsPageData.movie.name}</span>
             <img className='m-auto py-4 h-auto rounded' src={detailsPageData.Image} alt="" />
-            <span className='text-sm font-semibold block text-center py-4'>Description</span>
-            <div className='flex w-1/3 m-auto border p-2'>
+            <span className='text-sm font-semibold block text-center py-4 dark:text-gray-300'>Description</span>
+            <div className='flex md:w-1/3 m-auto border dark:border-gray-600 dark:text-gray-300 p-2'>
                 <div className='w-1/2 m-auto'>
                     <span className='block text-sm font-semibold'>ID </span>
                     <span className='block text-sm font-semibold'>Name </span>
@@ -78,9 +78,9 @@ const MovieDetails = (props: proptyps) => {
                     <span className='block text-sm font-semibold'>: {detailsPageData.movie.episode}</span>
                 </div>
             </div>
-            <div className='w-1/2 m-auto text-center py-4'>
-                <button onClick={AddtoWatchlist} className={`border px-4 py-2 mx-2 bg-teal-600 text-gray-100 text-sm font-semibold rounded-md ${alreadyinWatchList && 'bg-red-600'}`}>{!alreadyinWatchList ? 'Add to Watch List' : 'Remove from Watch List'} </button>
-                <button onClick={AddtoBookmark} className={`border px-4 py-2 mx-2 bg-teal-600 text-gray-100 text-sm font-semibold rounded-md ${alreadyinBookmarks && 'bg-red-600'}`}>{!alreadyinBookmarks ? 'Add to Bookmark' : 'Remove from Bookmark'} </button>                
+            <div className='md:w-1/2 m-auto text-center py-4'>
+                <button onClick={AddtoWatchlist} className={`border px-4  py-2 mx-2 text-gray-100 text-sm font-semibold rounded-md ${alreadyinWatchList ? 'bg-red-600' : 'bg-teal-600' }`}>{!alreadyinWatchList ? 'Add to Watch List' : 'Remove from Watch List'} </button>
+                <button onClick={AddtoBookmark} className={`border px-4  py-2 mx-2 text-gray-100 text-sm font-semibold rounded-md ${alreadyinBookmarks ? 'bg-red-600' : 'bg-teal-600'}`}>{!alreadyinBookmarks ? 'Add to Bookmark' : 'Remove from Bookmark'} </button>                
             </div>
         </div>
     )

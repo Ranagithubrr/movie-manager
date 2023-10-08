@@ -1,0 +1,32 @@
+/* In your CSS or a separate CSS file */
+@keyframes moveRight {
+    from {
+        left: 0;
+        transform: translateX(0);
+    }
+
+    to {
+        right: auto;
+        transform: translateX(100%);
+    }
+}
+
+@keyframes moveLeft {
+    from {
+        right: 0;
+        transform: translateX(0);
+    }
+
+    to {
+        left:0;
+        transform: translateX(-100%);
+    }
+}
+
+.dark-mode {
+    animation: moveRight 0.3s ease-in-out forwards;
+}
+
+.light-mode {
+    animation: moveLeft 0.3s ease-in-out forwards;
+}

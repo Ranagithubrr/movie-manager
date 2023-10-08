@@ -68,7 +68,7 @@ const Singlemovie = (props: proptype) => {
 
 
   return (
-    <div className='shadow-md cursor-pointer relative overflow-hidden grid grid-rows-[1fr,auto] p-3'>
+    <div className='shadow-md dark:shadow-gray-500 shadow-gray-300 cursor-pointer relative overflow-hidden grid grid-rows-[1fr,auto] p-3'>
       {showstate && (
         <div onClick={HideBackDrop} className="fixed w-screen left-0 h-screen top-0 bg-gray-400 bg-opacity-25 opacity-25 z-10"></div>
       )}
@@ -83,14 +83,14 @@ const Singlemovie = (props: proptype) => {
           <img src={Image} alt="movie image" className='h-48 w-full' />
         </div>
         <div>
-          <span className='font-semibold block text-sm'>ID: {movie?.id}</span>
-          <span className='font-semibold block text-sm'>Episode No: {movie?.episode}</span>
-          <span className='font-bold block text-lg'>{movie?.name}</span>
+          <span className='font-semibold block text-sm dark:text-gray-300'>ID: {movie?.id}</span>
+          <span className='font-semibold block text-sm dark:text-gray-300'>Episode No: {movie?.episode}</span>
+          <span className='font-bold block text-lg dark:text-gray-300'>{movie?.name}</span>
         </div>
       </div>
       <div className='flex justify-between items-end'>
-        <button onClick={AddtoBookmarks} className={`border px-5 py-1 text-md border-gray-400 rounded-sm hover:bg-gray-200 ${alreadyinBookmarks ? 'bg-yellow-300 hover:bg-yellow-400' : 'hover:bg-gray-200'}`}><BsBookmarkStar /></button>
-        <button onClick={AddtoWatchList} className={`border px-5 py-1 text-md border-gray-400 rounded-sm ${alreadyinWatchList ? 'bg-green-500 hover:bg-green-400' : 'hover:bg-gray-200'}`}><AiOutlineEye /></button>
+        <button onClick={AddtoBookmarks} className={`border px-5 py-1 text-md border-gray-400 dark:text-gray-300 rounded-sm hover:bg-gray-200 ${alreadyinBookmarks ? 'bg-yellow-300 hover:bg-yellow-400 dark:text-gray-800' : 'hover:bg-gray-200'}`}><BsBookmarkStar /></button>
+        <button onClick={AddtoWatchList} className={`border px-5 py-1 text-md border-gray-400 dark:text-gray-300 rounded-sm ${alreadyinWatchList ? 'bg-green-500 hover:bg-green-400 dark:text-gray-800' : 'hover:bg-gray-200'}`}><AiOutlineEye /></button>
       </div>
     </div>
   )
