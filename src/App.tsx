@@ -1,5 +1,5 @@
 import './App.css';
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import Movies from "./components/Movies/Movies"
 import Navbar from "./components/Navbar/Navbar"
 function App() {
