@@ -6,6 +6,7 @@ import { AiOutlineArrowLeft, AiOutlineClose } from 'react-icons/ai';
 import { addwatchlist, removewatchlist } from '../../redux/WatchList_reducer/Watchlist_Actions';
 import { addAlreadywatchlist, removeAlreadywatchlist } from '../../redux/Already_watched_reducer/Already_watched_list_Actions';
 import { removefrombookmarks } from '../../redux/Bookmark_reducer/Bookmark_Actions';
+import { RootState } from '../../redux/Store';
 
 export interface elementtype {
     id: string,
@@ -15,9 +16,9 @@ export interface elementtype {
 }
 
 const Sidebar = () => {
-    const watchlist = useSelector((state) => state.WatchlistReducer.watchlist);
-    const bookmark = useSelector((state) => state.BookmarkReducer.bookmark);
-    const AlreadyWatchlist = useSelector((state) => state.AlreadyWatchlistReducer.Alreadywatchlist);    
+    const watchlist = useSelector((state:RootState) => state.WatchlistReducer.watchlist);
+    const bookmark = useSelector((state:RootState) => state.BookmarkReducer.bookmark);
+    const AlreadyWatchlist = useSelector((state:RootState) => state.AlreadyWatchlistReducer.Alreadywatchlist);    
     const dispatch = useDispatch();
     const HideSideBar = () => {
         dispatch(hideSidebar());

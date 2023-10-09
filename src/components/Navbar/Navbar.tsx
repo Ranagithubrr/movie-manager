@@ -5,9 +5,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { showsidebar } from '../../redux/Sidebar_reducer/Sidebar_Actions';
 import Sidebar from '../Sidebar/Sidebar';
 import './Navbar.css';
+import { RootState } from '../../redux/Store';
 
 const Navbar = ({ SetDarkMode }: { SetDarkMode: React.Dispatch<React.SetStateAction<string | null>> }) => {
-  const sidebarState = useSelector((state) => state.SidebarReducer);
+  const sidebarState = useSelector((state:RootState) => state.SidebarReducer);
   const dispatch = useDispatch();
 
   const ShowSideBar = () => {

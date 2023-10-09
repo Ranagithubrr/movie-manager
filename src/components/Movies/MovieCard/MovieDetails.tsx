@@ -2,6 +2,7 @@ import { FaTimes } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { addtobookmarks } from '../../../redux/Bookmark_reducer/Bookmark_Actions';
 import { addwatchlist } from '../../../redux/WatchList_reducer/Watchlist_Actions';
+import { RootState } from '../../../redux/Store';
 
 interface proptyps {
     setShowMovieDetails: React.Dispatch<React.SetStateAction<boolean>>,
@@ -19,8 +20,8 @@ interface proptyps {
 const MovieDetails = (props: proptyps) => {
 
     const dispatch = useDispatch();
-    const watchlist = useSelector((state) => state.WatchlistReducer.watchlist);
-    const Bookmarks = useSelector((state) => state.BookmarkReducer);
+    const watchlist = useSelector((state:RootState) => state.WatchlistReducer.watchlist);
+    const Bookmarks = useSelector((state:RootState) => state.BookmarkReducer);
 
     const { setShowMovieDetails, detailsPageData } = props;
 
@@ -32,15 +33,13 @@ const MovieDetails = (props: proptyps) => {
         episode: detailsPageData.movie!.episode,
         name: detailsPageData.movie!.name,
         time: ""
-    }
-    // getting date time;
+    }    
     const date = new Date().getDate();
-    const month = new Date().getMonth() + 1; // Adding 1 to month because getMonth() returns 0-based months
+    const month = new Date().getMonth() + 1;
     const year = new Date().getFullYear();
     const hours = new Date().getHours();
     const minutes = new Date().getMinutes();
-
-    // Function to add leading zeros
+    
     function addLeadingZero(value: number) {
         return value < 10 ? `0${value}` : value;
     }
