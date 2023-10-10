@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { hideSidebar } from '../../redux/Sidebar_reducer/Sidebar_Actions';
 import { BsTrash, BsCheckLg } from 'react-icons/bs';
 import { AiOutlineArrowLeft, AiOutlineClose } from 'react-icons/ai';
-import { addwatchlist, removewatchlist } from '../../redux/WatchList_reducer/Watchlist_Actions';
+import { addbookmarttowatchlist, addwatchlist, removewatchlist } from '../../redux/WatchList_reducer/Watchlist_Actions';
 import { addAlreadywatchlist, removeAlreadywatchlist } from '../../redux/Already_watched_reducer/Already_watched_list_Actions';
 import { removefrombookmarks } from '../../redux/Bookmark_reducer/Bookmark_Actions';
 import { RootState } from '../../redux/Store';
@@ -16,13 +16,15 @@ export interface elementtype {
 }
 
 const Sidebar = () => {
-    const watchlist = useSelector((state:RootState) => state.WatchlistReducer.watchlist);
-    const bookmark = useSelector((state:RootState) => state.BookmarkReducer.bookmark);
-    const AlreadyWatchlist = useSelector((state:RootState) => state.AlreadyWatchlistReducer.Alreadywatchlist);    
+    const watchlist = useSelector((state: RootState) => state.WatchlistReducer.watchlist);
+    const bookmark = useSelector((state: RootState) => state.BookmarkReducer.bookmark);
+    const AlreadyWatchlist = useSelector((state: RootState) => state.AlreadyWatchlistReducer.Alreadywatchlist);
     const dispatch = useDispatch();
+
     const HideSideBar = () => {
         dispatch(hideSidebar());
     }
+
     const [SidebarStatus, setSidebarStatus] = useState({
         watchlist: false,
         bookmark: false,
@@ -38,29 +40,35 @@ const Sidebar = () => {
         })
     }
     const TriggersClicked = (id: number) => {
-        if (id === 1) {
-            setSidebarStatus({
-                ...SidebarStatus,
-                watchlist: true,
-                buttons: false
-            })
-        } else if (id === 2) {
-            setSidebarStatus({
-                ...SidebarStatus,
-                bookmark: true,
-                buttons: false
-            })
-        } else if (id === 3) {
-            setSidebarStatus({
-                ...SidebarStatus,
-                watched: true,
-                buttons: false
-            })
-        } else {
-            setSidebarStatus({
-                ...SidebarStatus,
-                buttons: true
-            })
+        switch (id) {
+            case 1:
+                setSidebarStatus({
+                    ...SidebarStatus,
+                    watchlist: true,
+                    buttons: false
+                })
+                break;
+            case 2:
+                setSidebarStatus({
+                    ...SidebarStatus,
+                    bookmark: true,
+                    buttons: false
+                })
+                break;
+            case 3:
+                setSidebarStatus({
+                    ...SidebarStatus,
+                    watched: true,
+                    buttons: false
+                })
+                break;
+
+            default:
+                setSidebarStatus({
+                    ...SidebarStatus,
+                    buttons: true
+                })
+                break;
         }
     }
     // deleting watchlist
@@ -71,8 +79,8 @@ const Sidebar = () => {
     const DeleteBookmark = (id: string) => {
         dispatch(removefrombookmarks(id))
     }
-    // move to already watched list
-    const AddtoAlreadyWatchedList = (ele: elementtype) => {
+    // A common function for add watchlist and add already watched list
+    const CommonAddWatchListAndAlreadyWatchListFunc = (ele: elementtype, action: "addwatch" | "addalreadywatch" | "booktowatch") => {
         let newItem = {
             id: ele.id,
             episode: ele.episode,
@@ -90,30 +98,17 @@ const Sidebar = () => {
         }
         const finalDateTime = `${addLeadingZero(date)}.${addLeadingZero(month)}.${year} -- ${addLeadingZero(hours)}:${addLeadingZero(minutes)}`;
         newItem.time = finalDateTime;
-        dispatch(addAlreadywatchlist(newItem));
-        dispatch(removewatchlist(ele.id));
-    }
-    // move to already watched list
-    const AddtoWatchList = (ele: elementtype) => {
-        let newItem = {
-            id: ele.id,
-            episode: ele.episode,
-            name: ele.name,
-            time: "12 AM"
+        // conditionaly calling dispatch
+        if (action == "addwatch") {
+            dispatch(addwatchlist(newItem));
+            dispatch(removefrombookmarks(ele.id));
+        } else if(action == "addalreadywatch") {
+            dispatch(addAlreadywatchlist(newItem));
+            dispatch(removewatchlist(ele.id));
+        }else if(action === "booktowatch"){
+            dispatch(addbookmarttowatchlist(newItem)); 
+            dispatch(removefrombookmarks(ele.id));           
         }
-        const date = new Date().getDate();
-        const month = new Date().getMonth() + 1; 
-        const year = new Date().getFullYear();
-        const hours = new Date().getHours();
-        const minutes = new Date().getMinutes();
-
-        function addLeadingZero(value: number) {
-            return value < 10 ? `0${value}` : value;
-        }
-        const finalDateTime = `${addLeadingZero(date)}.${addLeadingZero(month)}.${year} -- ${addLeadingZero(hours)}:${addLeadingZero(minutes)}`;
-        newItem.time = finalDateTime;
-        dispatch(addwatchlist(newItem));
-        dispatch(removefrombookmarks(ele.id));
     }
 
     // delete from already watched 
@@ -149,7 +144,7 @@ const Sidebar = () => {
                                                 <div className='bg-red-200 px-3 py-1 inline-block rounded-sm my-1 cursor-pointer' onClick={() => DeleteItem(ele.id)}>
                                                     <span className='text-red-700 font-extrabold text-md '><BsTrash /></span>
                                                 </div>
-                                                <div className='bg-green-200 px-3 py-1 inline-block rounded-sm my-1 ml-3 cursor-pointer' onClick={() => AddtoAlreadyWatchedList(ele)}>
+                                                <div className='bg-green-200 px-3 py-1 inline-block rounded-sm my-1 ml-3 cursor-pointer' onClick={() => CommonAddWatchListAndAlreadyWatchListFunc(ele, "addalreadywatch")}>
                                                     <span className='text-green-700 font-extrabold text-md '><BsCheckLg /></span>
                                                 </div>
                                             </div>
@@ -182,7 +177,7 @@ const Sidebar = () => {
                                                 <div className='bg-red-200 px-3 py-1 inline-block rounded-sm my-1 cursor-pointer' onClick={() => DeleteBookmark(ele.id)}>
                                                     <span className='text-red-700 font-extrabold text-md '><BsTrash /></span>
                                                 </div>
-                                                <div className='bg-green-200 px-3 py-1 inline-block rounded-sm my-1 ml-3 cursor-pointer' onClick={() => AddtoWatchList(ele)}>
+                                                <div className='bg-green-200 px-3 py-1 inline-block rounded-sm my-1 ml-3 cursor-pointer' onClick={() => CommonAddWatchListAndAlreadyWatchListFunc(ele, "booktowatch")}>
                                                     <span className='text-green-700 font-extrabold text-md '><BsCheckLg /></span>
                                                 </div>
                                             </div>
@@ -193,7 +188,7 @@ const Sidebar = () => {
                             }
                             {
                                 bookmark.length == 0 && <div>
-                                    <span className='text-xs font-semibold block text-center py-10'>No Items in Your Bookmark</span>
+                                    <span className='text-xs font-semibold block text-center py-10 dark:text-gray-300'>No Items in Your Bookmark</span>
                                 </div>
 
                             }
@@ -210,7 +205,7 @@ const Sidebar = () => {
                             <span className='text-sm font-semibold text-gray-600 dark:text-gray-400'>Watched</span>
                             {
                                 AlreadyWatchlist.length == 0 && <div>
-                                    <span className='text-xs font-semibold block text-center py-10'>You haven't watched anything yet</span>
+                                    <span className='text-xs font-semibold block text-center py-10 dark:text-gray-300'>You haven't watched anything yet</span>
                                 </div>
                             }
                             {

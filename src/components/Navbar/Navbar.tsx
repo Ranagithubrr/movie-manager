@@ -8,7 +8,7 @@ import './Navbar.css';
 import { RootState } from '../../redux/Store';
 
 const Navbar = ({ SetDarkMode }: { SetDarkMode: React.Dispatch<React.SetStateAction<string | null>> }) => {
-  const sidebarState = useSelector((state:RootState) => state.SidebarReducer);
+  const sidebarState = useSelector((state: RootState) => state.SidebarReducer);
   const dispatch = useDispatch();
 
   const ShowSideBar = () => {

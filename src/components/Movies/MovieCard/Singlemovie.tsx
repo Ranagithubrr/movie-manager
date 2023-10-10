@@ -84,10 +84,11 @@ const Singlemovie = (props: proptype) => {
 
 
   return (
+
     <div className='shadow-md dark:shadow-gray-500 shadow-gray-300 cursor-pointer relative overflow-hidden grid grid-rows-[1fr,auto] p-3'>
       {showstate && (
         <div onClick={HideBackDrop} className="fixed w-screen left-0 h-screen top-0 bg-gray-400 bg-opacity-25 opacity-25 z-10"></div>
-      )}
+      )}         
       {
         alreadyinCompletedWatchList &&
         <div className='absolute -right-8 top-5 w-32 text-center rotate-45 bg-yellow-300'>
@@ -107,6 +108,7 @@ const Singlemovie = (props: proptype) => {
       <div className='flex justify-between items-end'>
         <button onClick={AddtoBookmarks} className={`border px-5 py-1 text-md  rounded-sm hover:bg-gray-200 dark:border-gray-600 dark:text-gray-300 ${alreadyinBookmarks ? 'bg-yellow-300 hover:bg-yellow-400 dark:text-gray-800 dark:hover:bg-yellow-300' : 'hover:bg-gray-200 dark:hover:bg-gray-600'}`}><BsBookmarkStar /></button>
         <button onClick={AddtoWatchList} className={`border px-5 py-1 text-md border-gray-400 dark:text-gray-300  rounded-sm ${alreadyinWatchList ? 'bg-green-500 hover:bg-green-400 dark:hover:green400 dark:text-gray-800 dark:hover:bg-green-300' : 'hover:bg-gray-200 dark:hover:bg-gray-600'}`}><AiOutlineEye /></button>
+
       </div>
     </div>
   )

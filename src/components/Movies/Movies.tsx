@@ -15,7 +15,10 @@ const Movies = () => {
       id: string;
       name: string;
     };
-  }>({ Image: '', movie: { created: '', episode: '', id: '', name: '' } });
+  }>({
+    Image: '',
+    movie: { created: '', episode: '', id: '', name: '' }
+  });
   return (
     <div className='dark:bg-gray-800 p-3 grid grid-cols-1  sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-10 pt-5'>
       {
@@ -37,7 +40,12 @@ const Movies = () => {
       {
         data && data.episodes?.results?.map((ele, index) => {
           return (
-            <Singlemovie setDetailsPageData={setDetailsPageData} Image={DummyImages[index].image} showstate={showMovieDetails} setDetails={setShowMovieDetails} movie={ele} key={ele?.id} />
+            <Singlemovie
+              setDetailsPageData={setDetailsPageData}
+              Image={DummyImages[index].image}
+              showstate={showMovieDetails}
+              setDetails={setShowMovieDetails}
+              movie={ele} key={ele?.id} />
           )
         })
       }

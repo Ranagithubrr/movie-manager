@@ -1,4 +1,4 @@
-import { ADD_WATCHLIST, REMOVE_WATCHLIST } from "./Watchlist_ActionTypes";
+import { ADD_BOOKMARK_TO_WATCHLIST, ADD_WATCHLIST, REMOVE_WATCHLIST } from "./Watchlist_ActionTypes";
 
 
 
@@ -32,7 +32,13 @@ export interface payloadtype {
 type ActionType = {
     type: "ADD_WATCHLIST",
     payload: payloadtype
-} |
+}
+    |
+{
+    type: "ADD_BOOKMARK_TO_WATCHLIST",
+    payload: payloadtype
+}
+    |
 {
     type: "REMOVE_WATCHLIST",
     payload: string
@@ -59,6 +65,17 @@ export const WatchlistReducer = (state = InitialState, action: ActionType) => {
                 // Save the updated state to local storage.
                 localStorage.setItem("watchlistState", JSON.stringify(updatedState));
                 return updatedState;
+            }
+        case ADD_BOOKMARK_TO_WATCHLIST:
+            if (!state.watchlist.some((item) => item.id === action.payload.id)) {
+                const updatedState = {
+                    ...state,
+                    watchlist: [...state.watchlist, action.payload],
+                };
+                localStorage.setItem("watchlistState", JSON.stringify(updatedState));
+                return updatedState;
+            } else {                
+                return state;
             }
         case REMOVE_WATCHLIST:
             const idToRemove = action.payload;
